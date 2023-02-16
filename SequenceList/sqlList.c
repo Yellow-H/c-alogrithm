@@ -1,25 +1,26 @@
-// ²»ÔÙÇ¿ÖÆÊ¹ÓÃscanf_s
+// ä¸å†å¼ºåˆ¶ä½¿ç”¨scanf_s
 #define _CRT_SECURE_NO_WARNINGS
 
 #include<stdio.h>
 #include<stdbool.h>
 
 #define MAXSIZE 100
+typedef int EleType;
 
-typedef struct{
-	int *data;
+typedef struct {
+	EleType *data;
 	int length;
 }SqList;
 
-// ³õÊ¼»¯
-bool InitSqList(SqList * L){
-	L->data = (int*)malloc(MAXSIZE * sizeof(int));
-	if (!L->data){
+// åˆå§‹åŒ–
+bool InitSqList(SqList * L) {
+	L->data = (EleType*)malloc(MAXSIZE * sizeof(EleType));
+	if (!L->data) {
 		return false;
 	}
-	else{
+	else {
 		L->length = 0;
-		// Ä¬ÈÏ³õÊ¼»¯5¸öÊı
+		// é»˜è®¤åˆå§‹åŒ–5ä¸ªæ•°
 		int i = 0;
 		for (i; i < 5; i++)
 		{
@@ -30,43 +31,59 @@ bool InitSqList(SqList * L){
 	}
 };
 
-// Ö¸¶¨Î»ÖÃ²åÈë
-void InsertSqList(SqList *L,int ele, int pos) {
-	// Ê×ÏÈÅĞ¶ÏÊÇ·ñÔ½½ç
-	if (L->length ==MAXSIZE)
+// æœç´¢æŸ¥æ‰¾è¿”å›ä¸ºç¬¬å‡ ä¸ª
+int FindByValue(SqList *L, EleType val) {
+	if (L->length ==0 || !L->data)
 	{
-		printf("ÒÑÂú²»ÔÊĞí²åÈë");
+		printf("ç©ºè¡¨");
+		return -1;
+	}
+	for (int i = 0; i <=L->length-1; i++)
+	{
+		if (L->data[i] == val)
+		{
+			return i+1;
+		}
+	}
+}
+
+// æŒ‡å®šä½ç½®æ’å…¥
+void InsertSqList(SqList *L, int ele, int pos) {
+	// é¦–å…ˆåˆ¤æ–­æ˜¯å¦è¶Šç•Œ
+	if (L->length == MAXSIZE)
+	{
+		printf("å·²æ»¡ä¸å…è®¸æ’å…¥");
 	}
 	else
 	{
-		if (pos <1 || pos > L->length+1)
+		if (pos <1 || pos > L->length + 1)
 		{
-			printf("Ô½½çÖØĞÂÑ¡ÔñÎ»ÖÃ");
+			printf("è¶Šç•Œé‡æ–°é€‰æ‹©ä½ç½®");
 		}
 		else
 		{
-			for (int i = L->length-1; i>= pos-1; i--)
+			for (int i = L->length - 1; i >= pos - 1; i--)
 			{
-				L->data[i+1] = L->data[i];
+				L->data[i + 1] = L->data[i];
 			}
-			L->data[pos-1] = ele;
+			L->data[pos - 1] = ele;
 			L->length++;
 		}
 	}
 }
 
-// Ö¸¶¨Î»ÖÃÉ¾³ı
+// æŒ‡å®šä½ç½®åˆ é™¤
 void DelSqList(SqList *L, int pos)
 {
-	if (pos<1||pos>L->length)
+	if (pos<1 || pos>L->length)
 	{
-		printf("Ô½½çÁË");
+		printf("è¶Šç•Œäº†");
 	}
 	else
 	{
-		if (pos <L->length)
+		if (pos < L->length)
 		{
-			for (int i = pos-1; i < L->length; i++)
+			for (int i = pos - 1; i < L->length; i++)
 			{
 				L->data[i] = L->data[i + 1];
 			}
@@ -74,28 +91,48 @@ void DelSqList(SqList *L, int pos)
 		}
 	}
 }
-// Ö¸¶¨ÖµÉ¾³ı
+// æŒ‡å®šå€¼åˆ é™¤
+int DelByValue(SqList *L, EleType val) {
+	if (!L->data ||L->length ==0)
+	{
+		printf("æ— å…ƒç´ æ— æ³•åˆ é™¤");
+		return -1;
+	}
+	int i = 0;
+	while (i < L->length) {
+		printf("Lé•¿ï¼š%d\n", L->length);
+		// å®šä½å…ƒç´ 
+		if (L->data[i] == val){
+			// åˆ é™¤
+			for (int j = i; j < L->length-1; j++){
+				L->data[j] = L->data[j + 1];
+			}
+			L->length--;
+		}
+		i++;
+	}
 
+}
 
-// Ïú»ÙÏßĞÔ±í
-void DestroySqList(SqList *L){
+// é”€æ¯çº¿æ€§è¡¨
+void DestroySqList(SqList *L) {
 	if (L->data) {
 		free(L->data);
 	}
 }
 
-//Çå¿ÕÏßĞÔ±í
+//æ¸…ç©ºçº¿æ€§è¡¨
 void ClearList(SqList *L) {
-	//½«ÏßĞÔ±íµÄ³¤¶ÈÖÃÎª0
+	//å°†çº¿æ€§è¡¨çš„é•¿åº¦ç½®ä¸º0
 	L->length = 0;
 }
 
-//ÇóÏßĞÔ±íLµÄ³¤¶È
+//æ±‚çº¿æ€§è¡¨Lçš„é•¿åº¦
 int GetLength(SqList *L) {
 	return L->length;
 }
 
-// ´òÓ¡ÏßĞÔ±í
+// æ‰“å°çº¿æ€§è¡¨
 void PrintSqList(SqList *L) {
 	for (int i = 0; i < L->length; i++)
 	{
@@ -103,14 +140,12 @@ void PrintSqList(SqList *L) {
 	}
 	printf("\n");
 }
-int main(){
+int main() {
 	SqList sqList;
 	SqList *p1;
 	p1 = &sqList;
 	InitSqList(&sqList);
-	InsertSqList(&sqList, 213, 2);
-	PrintSqList(p1);
-	DelSqList(&sqList, 7);
-	PrintSqList(p1);
+	DelByValue(&sqList, 5);
+	PrintSqList(&sqList);
 	return 0;
 }
